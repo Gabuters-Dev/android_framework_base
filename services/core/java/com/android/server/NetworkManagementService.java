@@ -1851,6 +1851,42 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         initVpnInterface();
         restrictAppOnInterface(RESTRICT_USECASE_VPN, uid, restrict, mVpnInterfaceName,
                 mPendingRestrictOnVpn, mVpnBlacklist);
+        try {
+            final String action = restrict ? "add" : "remove";
+            mConnector.execute("bandwidth", action + "restrictappsondata", mDataInterfaceName, uid);
+        } catch (NativeDaemonConnectorException e) {
+            throw e.rethrowAsParcelableException();
+        }
+    }
+
+    @Override
+    public void restrictAppOnVpn(int uid, boolean restrict) {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+        // silently discard when control disabled
+        if (!mBandwidthControlEnabled) return;
+
+        initVpnInterface();
+        if (TextUtils.isEmpty(mVpnInterfaceName)) {
+            // We don't have an interface name since vpn is not active
+            // yet, so queue up the request for when it comes up alive
+            mPendingRestrictOnVpn.put(uid, restrict);
+            return;
+        }
+
+        synchronized (mQuotaLock) {
+            boolean oldValue = mVpnBlacklist.get(uid, false);
+            if (oldValue == restrict) {
+                return;
+            }
+            mVpnBlacklist.put(uid, restrict);
+        }
+
+        try {
+            final String action = restrict ? "add" : "remove";
+            mConnector.execute("bandwidth", action + "restrictappsonvpn", mVpnInterfaceName, uid);
+        } catch (NativeDaemonConnectorException e) {
+            throw e.rethrowAsParcelableException();
+        }
     }
 
     @Override
