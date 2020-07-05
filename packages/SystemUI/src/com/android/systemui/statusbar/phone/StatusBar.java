@@ -408,7 +408,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private static final boolean ENABLE_LOCKSCREEN_WALLPAPER = true;
 
     /** Whether to force dark theme if Configuration.UI_MODE_NIGHT_YES. */
-    private static final boolean DARK_THEME_IN_NIGHT_MODE = true;
+    private static final boolean DARK_THEME_IN_NIGHT_MODE = false;
 
     /**
      * Never let the alpha become zero for surfaces that draw with SRC - otherwise the RenderNode
