@@ -8026,6 +8026,20 @@ public final class Settings {
 
         /**
          * If touch exploration is enabled.
+         * Indicates whether a DPC has been downloaded during provisioning.
+         *
+         * <p>Type: int (0 for false, 1 for true)
+         *
+         * <p>If this is true, then any attempts to begin setup again should result in factory reset
+         *
+         * @hide
+         */
+        public static final String MANAGED_PROVISIONING_DPC_DOWNLOADED =
+                "managed_provisioning_dpc_downloaded";
+
+        /**
+         * Whether the current user has been set up via setup wizard (0 = false, 1 = true)
+         * @hide
          */
         public static final String TOUCH_EXPLORATION_ENABLED = "touch_exploration_enabled";
 
