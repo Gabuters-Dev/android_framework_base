@@ -1848,19 +1848,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub
 
     @Override
     public void restrictAppOnVpn(int uid, boolean restrict) {
-        initVpnInterface();
-        restrictAppOnInterface(RESTRICT_USECASE_VPN, uid, restrict, mVpnInterfaceName,
-                mPendingRestrictOnVpn, mVpnBlacklist);
-        try {
-            final String action = restrict ? "add" : "remove";
-            mConnector.execute("bandwidth", action + "restrictappsondata", mDataInterfaceName, uid);
-        } catch (NativeDaemonConnectorException e) {
-            throw e.rethrowAsParcelableException();
-        }
-    }
-
-    @Override
-    public void restrictAppOnVpn(int uid, boolean restrict) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
         // silently discard when control disabled
         if (!mBandwidthControlEnabled) return;
